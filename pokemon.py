@@ -8,7 +8,18 @@ class Pokemon:
     # PART 1 ########### TO DO ###################
     # Initialize the Pokemon Class with an __init__() method
     # This class takes in 10 variable parameters in addition to self
-    #
+    def __init__(self, name, hp, ph_attack, defense, sp_attack, sp_defense, speed, type1, type2, moves):
+        self.name = name
+        self.hp = hp
+        self.ph_attack = ph_attack
+        self.defense = defense
+        self.sp_attack = sp_attack
+        self.sp_defense = sp_defense
+        self.speed = speed
+        self.type1 = type1
+        self.type2 = type2
+        self.moves = moves
+
     # HINT: Take a look at some of the instances of this pokemon class below along with some of the pre-built
     # class methods to get an idea of what you might want to call these variables along with their ordering
     # to call  these parameters
@@ -21,7 +32,8 @@ class Pokemon:
     #
     # The revive function is also one line. It starts with self.__init__() which has strictly 10 variable parameters
     # One variable parameter passed into this function is not like the others, what might it be???
-    
+    def revive(self, pokemon_hp):
+        self.__init__(self.name, pokemon_hp, self.ph_attack, self.defense, self.sp_attack, self.sp_defense, self.speed, self.type1, self.type2, self.moves)
 
 
     ################ POKEMON ATTACK METHOD ################
@@ -631,21 +643,34 @@ xerneas = Pokemon('Xerneas', 394, 268, 226, 397, 232, 297, 'fairy', 'none',
 # PART 2 ############ TO DO ###############
 # Create at least 3 new instances of the Pokemon Class
 # here. You can check to see if the pokemon has been created properly
-# by printing its different attribuites.
-
+# by printing its different attribuites
 # 1st new instance
+marowak = Pokemon('Marowak', 60, 80, 110, 50, 80, 45, 'fire', 'ghost',
+    [{'name': 'bonemerang', 'movetype': 'ground', 'damage': 50, 'phys_special': 'physical'},
+    {'name': 'focus_blast', 'movetype': 'fight', 'damage': 120, 'phys_special': 'special'},
+    {'name': 'shadow_ball', 'movetype': 'ghost', 'damage': 80, 'phys_special': 'special'},
+    {'name': 'fire_blast', 'movetype': 'fire', 'damage': 110, 'phys_special': 'special'}])
 
 # 2nd new instance
+spiritomb = Pokemon('Spiritomb', 50, 92, 108, 92, 108, 35, 'ghost', 'dark',
+    [{'name': 'shadow sneak', 'movetype': 'ghost', 'damage': 40, 'phys_special': 'special'},
+    {'name': 'dark pulse', 'movetype': 'dark', 'damage': 80, 'phys_special': 'special'},
+    {'name': 'ominous wind', 'movetype': 'ghost', 'damage': 60, 'phys_special': 'special'},
+    {'name': 'sucker punch', 'movetype': 'dark', 'damage': 70, 'phys_special': 'special'}])
 
 # 3rd new instance
-
+# bulbasaur = Pokemon('bulbasaur', 45, 49, 49, 65, 65, 45, 'grass', 'poison',
+#  [{'name': 'growl', 'movetype': 'normal', 'damage': none, 'phys_special': 'special'},
+#  {'name': 'sleep powder', 'movetype': 'grass', 'damage': none, 'phys_special': 'special'},
+#  {'name': 'sweet scent', 'movetype': 'normal', 'damage': none, 'phys_special': 'special'},
+#  {'name': 'seed bomb', 'movetype': 'grass', 'damage': 80, 'phys_special': 'physical'}])
 
 ########################################################################################
 #                LIST OF ALL POKEMON INSTANCES
 # PART 2 ########### TO DO ##################
 # Add your new instances of the pokemon class to the list of all_pokemon
 
-all_pokemon = [venusaur, charizard, blastoise, meganium, typhlosion, feraligatr, sceptile, blaziken, swampert, torterra, infernape, empoleon, serperior, emboar, samurott, chesnaught, delphox, greninja, decidueye, incineroar, primarina, mewtwo, groudon, kyogre, rayquaza, lugia, ho_oh, palkia, dialga, giratina, yveltal, xerneas, arceus]
+all_pokemon = [venusaur, charizard, blastoise, meganium, typhlosion, feraligatr, sceptile, blaziken, swampert, torterra, infernape, empoleon, serperior, emboar, samurott, chesnaught, delphox, greninja, decidueye, incineroar, primarina, mewtwo, groudon, kyogre, rayquaza, lugia, ho_oh, palkia, dialga, giratina, yveltal, xerneas, arceus, marowak, spiritomb]
 
 
 ########################################################################################
@@ -659,28 +684,76 @@ all_pokemon = [venusaur, charizard, blastoise, meganium, typhlosion, feraligatr,
 # new_game() function
 
 
-def battle():       # def battle(???, ???, ???, ???):
+def battle(pokemon1, pokemon2, turn_counter, save_mon):       # def battle(???, ???, ???, ???):
     # PART 3 ############# TO DO ###################
-    # Establish a base case for the pokemon battle simulation
-    # Add to the turn count on each turn (recursion)
+    turn_counter.add_turn()
+    print(f'Turn {turn_counter.counter}')
+    # BASE CASE
+    if pokemon1.hp <= 0:
+        turn_counter.reset()
+        print(f'{pokemon2.name} wins!')
+        return new_game(pokemon1, pokemon2, save_mon)
+    elif pokemon2.hp <= 0:
+        turn_counter.reset()
+        print(f'{pokemon1.name} wins!')
+        return new_game(pokemon1, pokemon2, save_mon)
     # Create a randomized selection of moves for both pokemon
     # Store each pokemon's move selection as integer variables
     # Store each move's name as variables
     # Store the data from each pokemon's moves into variables 
+    selection1 = round((len(pokemon1.moves)-1) * random())
+    move1_name = pokemon1.moves[selection1]['name']
+    move1 = pokemon1.attack(selection1)[0:5]
+    selection2 = round((len(pokemon2.moves)-1) * random())
+    move2_name = pokemon2.moves[selection2]['name']
+    move2 = pokemon2.attack(selection2)[0:5]
     # Have the faster pokemon attack first
     # Then have the second pokemon attack
     # Print out which pokemon is making which attack whenever a pokemon makes an attack
     # Send the right data for the pokemon to take damage from the other pokemon's attacks
-    # Set proper win conditions
-    # Print out which pokemon has won if there is a winner
-    # Return a new_game() with the proper 3 parameters if there is a win
-    # After both pokemon have made a move return the updated data as a recursive callback
-
-    # BASE CASE HERE
-
-    # RECURSIVE CASE HERE
-
-    return # ???????
+    if pokemon1.speed > pokemon2.speed:
+        print(f'{pokemon1.name} used {move1_name}!')
+        pokemon2.damage(move1[0], move1[1], move1[2], move1[3], move1[4])
+        if pokemon2.hp <= 0:
+            turn_counter.reset()
+            print(f'{pokemon1.name} wins!')
+            return new_game(pokemon1, pokemon2, save_mon)
+        else:
+            print(f'{pokemon2.name} used {move2_name}!')
+            pokemon1.damage(move2[0], move2[1], move2[2], move2[3], move2[4])
+    elif pokemon2.speed > pokemon1.speed:
+        print(f'{pokemon2.name} used {move2_name}!')
+        pokemon1.damage(move2[0], move2[1], move2[2], move2[3], move2[4])
+        if pokemon1.hp <= 0:
+            turn_counter.reset()
+            print(f'{pokemon2.name} wins!')
+            return new_game(pokemon1, pokemon2, save_mon)
+        else:
+            print(f'{pokemon1.name} used {move1_name}!')
+            pokemon2.damage(move1[0], move1[1], move1[2], move1[3], move1[4])
+    else:
+        first = round(2 * random())
+        if first == 1:
+            print(f"{pokemon1.name} used {move1_name}")
+            pokemon2.damage(move1[0], move1[1], move1[2], move1[3], move1[4])
+            if pokemon2.hp <= 0:
+                turn_counter.reset()
+                print(f'{pokemon1.name} wins!')
+                return new_game(pokemon1, pokemon2, save_mon) 
+            else:
+                print(f"{pokemon2.name} used {move2_name}")
+                pokemon1.damage(move2[0], move2[1], move2[2], move2[3], move2[4])
+        else:
+            print(f"{pokemon2.name} used {move2_name}")
+            pokemon1.damage(move2[0], move2[1], move2[2], move2[3], move2[4])
+            if pokemon1.hp <= 0:
+                turn_counter.reset()
+                print(f'{pokemon2.name} wins!')
+                return new_game(pokemon1, pokemon2, save_mon)
+            else:
+                print(f"{pokemon1.name} used {move1_name}")
+                pokemon2.damage(move1[0], move1[1], move1[2], move1[3], move1[4])
+    return battle(pokemon1, pokemon2, turn_counter, save_mon)
 
 ########################################################################################
 #                NEW GAME FUNCTION
